@@ -1,8 +1,9 @@
 #################
 ##Project Excluded
 #################
-project_docs\
-testing\
+project_docs/
+testing/
+
 #################
 ## Eclipse
 #################
