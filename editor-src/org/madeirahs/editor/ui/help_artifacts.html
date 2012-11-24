@@ -1,0 +1,162 @@
+<html>
+<head>
+<b><font size=+1>Artifact Data Entry</font></b>
+</head>
+<br/>
+Enter the appropriate information from the accession records into each field on the editor document.  The only field that may never be
+duplicated from another artifact is the accession number.
+<br/><br/>
+<b>Date Entry Syntax</b>
+<br/>
+Dates must be entered with appropriate syntax to specify formatting and exact time.  The syntax layout is as follows:
+<br/>
+<pre>
+  formatString|dateString
+</pre>
+<br/>
+Optionally, a literal may be specified at the end using the '=' character:
+<br/>
+<pre>
+  formatString|dateString=literalString
+</pre>
+<br/>
+The literal will be the text displayed on the ArtifactView, while the date string will still be parsed and processed as the attributed time.
+<br/><br/>
+The format string is comprised of letters to represent how you are going to format the actual date (which comes after the '|' pipe symbol).  For example:
+<br/>
+<pre>
+  MM/dd/yyyy would specify format for a time value such as: 03/08/1905
+</pre>
+<br/>
+<b>N.B.</b><i> Make sure to include leading zeros for double digits (i.e 01)!</i>
+<br/><br/>
+The general standard format for most dates, if possible, should be:
+<br/>
+<pre>
+  MMM dd yyyy
+</pre>
+<br/>
+This would then be entered as such:
+<br/>
+<pre>
+  MMM dd yyyy|Oct 31 2010
+</pre>
+<br/>
+You can also specify a time range using dashes:
+<br/>
+<pre>
+  yyyy-yyyy|1930-1980
+</pre>
+<br/>
+This will make the time attribute be specified by that entire period of time instead of one specific date.  You could then speicfy a literal
+that says "20th century" or "c.1960" if desired.
+<br/><br/>
+<b>N.B.</b><i> If you only specify a year, the assumed exact date will be January 01.
+If you specify a month but no date, the assumed date is the first day of the month.</i>
+<br/><br/>
+Date formatting specification chart:
+<table border=0 cellspacing=3 cellpadding=0 summary="Chart shows pattern letters, date/time component, presentation, and examples.">
+     <tr bgcolor="#ccccff">
+         <th align=left>Letter
+         <th align=left>Date or Time Component
+         <th align=left>Presentation
+         <th align=left>Examples
+     <tr>
+         <td><code>G</code>
+         <td>Era designator
+         <td><a href="#text">Text</a>
+         <td><code>AD</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>y</code>
+         <td>Year
+         <td><a href="#year">Year</a>
+         <td><code>1996</code>; <code>96</code>
+     <tr>
+         <td><code>M</code>
+         <td>Month in year
+         <td><a href="#month">Month</a>
+         <td><code>July</code>; <code>Jul</code>; <code>07</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>w</code>
+         <td>Week in year
+         <td><a href="#number">Number</a>
+         <td><code>27</code>
+     <tr>
+         <td><code>W</code>
+         <td>Week in month
+         <td><a href="#number">Number</a>
+         <td><code>2</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>D</code>
+         <td>Day in year
+         <td><a href="#number">Number</a>
+         <td><code>189</code>
+     <tr>
+         <td><code>d</code>
+         <td>Day in month
+         <td><a href="#number">Number</a>
+         <td><code>10</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>F</code>
+         <td>Day of week in month
+         <td><a href="#number">Number</a>
+         <td><code>2</code>
+     <tr>
+         <td><code>E</code>
+         <td>Day in week
+         <td><a href="#text">Text</a>
+         <td><code>Tuesday</code>; <code>Tue</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>a</code>
+         <td>Am/pm marker
+         <td><a href="#text">Text</a>
+         <td><code>PM</code>
+     <tr>
+         <td><code>H</code>
+         <td>Hour in day (0-23)
+         <td><a href="#number">Number</a>
+         <td><code>0</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>k</code>
+         <td>Hour in day (1-24)
+         <td><a href="#number">Number</a>
+         <td><code>24</code>
+     <tr>
+         <td><code>K</code>
+         <td>Hour in am/pm (0-11)
+         <td><a href="#number">Number</a>
+         <td><code>0</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>h</code>
+         <td>Hour in am/pm (1-12)
+         <td><a href="#number">Number</a>
+         <td><code>12</code>
+     <tr>
+         <td><code>m</code>
+         <td>Minute in hour
+         <td><a href="#number">Number</a>
+         <td><code>30</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>s</code>
+         <td>Second in minute
+         <td><a href="#number">Number</a>
+         <td><code>55</code>
+     <tr>
+         <td><code>S</code>
+         <td>Millisecond
+         <td><a href="#number">Number</a>
+         <td><code>978</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>z</code>
+         <td>Time zone
+         <td><a href="#timezone">General time zone</a>
+         <td><code>Pacific Standard Time</code>; <code>PST</code>; <code>GMT-08:00</code>
+     <tr>
+         <td><code>Z</code>
+         <td>Time zone
+         <td><a href="#rfc822timezone">RFC 822 time zone</a>
+         <td><code>-0800</code>
+ </table>
+ Note: As you may have noticed in the table above, you may enter things like time of day and timezone.  While this won't harm anything in the system,
+ it's generally irrelevant for the purposes of this project and should thus, in most cases, be avoided.
+</html>

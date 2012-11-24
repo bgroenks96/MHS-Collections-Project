@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: 1.6.0 (Sun Microsystems Inc.)
+Main-Class: org/madeirahs/editor/launch/InitLauncher
+Name: org/madeirahs/editor/launch
+Specification-Title: MHS Collections Editor Launcher
+Specification-Version: 1.2.0
+Specification-Vendor: Madeira Historical Society
+Implementation-Title: org.madeirahs.editor.launch
+Implementation-Version: 0.40
+Implementation-Vendor: Madeira Historical Society

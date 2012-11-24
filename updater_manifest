@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: 1.6.0 (Sun Microsystems Inc.)
+Main-Class: org/madeirahs/editor/update/Update
+Name: org/madeirahs/editor/update
+Specification-Title: MHS Collections Editor Self Updater
+Specification-Version: 1.0
+Specification-Vendor: Madeira Historical Society
+Implementation-Title: org.madeirahs.editor.update
+Implementation-Version: 0.2
+Implementation-Vendor: Madeira Historical Society
