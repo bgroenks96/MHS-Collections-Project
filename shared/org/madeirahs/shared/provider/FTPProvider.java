@@ -285,7 +285,7 @@ public class FTPProvider implements DataProvider {
 		if (in == null) {
 			return null;
 		}
-		in = new FtpInputStream(in);
+		in = new BufferedInputStream(new FtpInputStream(in));
 		img = ImageIO.read(in);
 		in.close();
 		return img;

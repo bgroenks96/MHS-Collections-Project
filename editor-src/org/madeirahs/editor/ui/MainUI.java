@@ -1064,7 +1064,6 @@ public class MainUI extends JFrame {
 
 				if (preview.elem.is3DSupported()) {
 					V3DBundle bundle = preview.elem.bundle;
-					String[] imgs = bundle.getFinalImageArray();
 
 					outer: for (int i = 0; i < positions.length; i++) {
 						switch (i) {
@@ -1080,7 +1079,7 @@ public class MainUI extends JFrame {
 								break outer;
 							}
 						}
-						map.get(positions[i]).setSelectedItem(imgs[i]);
+						map.get(positions[i]).setSelectedItem(names[i+1]);
 					}
 				}
 
@@ -1122,7 +1121,7 @@ public class MainUI extends JFrame {
 					}
 					String str = (String) map.get(positions[i])
 							.getSelectedItem();
-					names[i] = str;
+					names[i] = nameMap.get(str);
 					switch (i) {
 					case 0:
 						break;
@@ -1155,6 +1154,7 @@ public class MainUI extends JFrame {
 				try {
 					preview.elem.configure3D(bundle);
 					preview.rebuild();
+					preview.validate();
 				} catch (V3DException e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,
@@ -1265,7 +1265,7 @@ public class MainUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			switch (docState) {
 			case CHANGED_STATE:
-				if(notifyUnsaved())
+				if(!notifyUnsaved())
 					return;
 			default:
 				nameMap.clear();

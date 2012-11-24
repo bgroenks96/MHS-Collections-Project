@@ -19,15 +19,12 @@
 
 package org.madeirahs.shared;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 
-import org.madeirahs.shared.time.DateTime;
-import org.madeirahs.shared.time.TimeSpec;
-import org.madeirahs.shared.v3d.V3DBundle;
-import org.madeirahs.shared.v3d.V3DException;
+import org.madeirahs.shared.time.*;
+import org.madeirahs.shared.v3d.*;
 
 public class Artifact implements Serializable, Comparable<Artifact> {
 
@@ -108,6 +105,8 @@ public class Artifact implements Serializable, Comparable<Artifact> {
 		this.medium = model.medium;
 		this.filenames = model.filenames;
 		this.fieldValues = model.fieldValues;
+		this.bundle = model.bundle;
+		this.v3d = model.v3d;
 	}
 
 	/**

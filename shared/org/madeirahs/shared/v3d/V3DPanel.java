@@ -19,24 +19,17 @@
 
 package org.madeirahs.shared.v3d;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.lang.ref.SoftReference;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.io.*;
+import java.lang.ref.*;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.madeirahs.shared.Artifact;
-import org.madeirahs.shared.provider.DataProvider;
+import org.madeirahs.shared.*;
+import org.madeirahs.shared.provider.*;
 
 public class V3DPanel extends JPanel {
 
@@ -233,7 +226,6 @@ public class V3DPanel extends JPanel {
 	}
 
 	private void updateFrame(int dir) {
-		System.out.println(v3d);
 		int prevFrame = currFrame;
 		if (v3d && loaded) {
 			switch (dir) {

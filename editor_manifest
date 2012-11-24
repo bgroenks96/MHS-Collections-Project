@@ -4,8 +4,8 @@ Main-Class: org/madeirahs/editor/main/Launcher
 Class-Path: commons-net-3.0.1.jar shared-lib.jar
 Name: org/madeirahs/editor/
 Specification-Title: MHS Collections Editor
-Specification-Version: 0.1.5
+Specification-Version: 1.0.0
 Specification-Vendor: Madeira Historical Society
 Implementation-Title: org.madeirahs.editor
-Implementation-Version: 0.80-003
+Implementation-Version: 0.81-000
 Implementation-Vendor: Madeira Historical Society
