@@ -107,7 +107,7 @@ public class Database implements Serializable {
 			throw (new DatabaseException("found invalid entry: " + dbentry.getName()));
 		}
 		InputStream instream = (prog != null) ? new MonitoredInStream(zipin,
-				prog, bos.size()) : zipin;
+				prog, (dbentry.getSize() > 0) ? dbentry.getSize():bos.size()) : zipin;
 		ObjectInputStream objIn = new ObjectInputStream(instream);
 		Database loaded = (Database) objIn.readObject();
 		objIn.close();
@@ -680,7 +680,7 @@ public class Database implements Serializable {
 	 * @author Brian Groenke
 	 *
 	 */
-	private class TimeValueCrawler extends DatabaseCrawler<TimeSpec> {
+	private static class TimeValueCrawler extends DatabaseCrawler<TimeSpec> {
 
 		protected TimeValueCrawler(TimeSpec a) {
 			super(a);

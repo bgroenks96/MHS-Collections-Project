@@ -31,6 +31,7 @@ import javax.swing.border.*;
 import org.madeirahs.editor.main.*;
 import org.madeirahs.editor.net.*;
 import org.madeirahs.shared.*;
+import org.madeirahs.shared.misc.*;
 import org.madeirahs.shared.provider.*;
 
 /**
@@ -133,7 +134,7 @@ public class UploadUI {
 				throw (new IOException("Unable to establish data streams"));
 			}
 
-			obj = new ObjectOutputStream(new OutStreamWrapper(os, sizeof(a)));
+			obj = new ObjectOutputStream(new OutStreamWrapper(os, Utils.sizeof(a)));
 			prog.setNote("<html>Writing artifact data...<br/></html>");
 
 			obj.writeObject(a);
@@ -243,22 +244,6 @@ public class UploadUI {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Computes the size of an Object by serializing it to memory and checking
-	 * the buffer size.
-	 * 
-	 * @param obj
-	 * @return
-	 * @throws IOException
-	 */
-	private int sizeof(Object obj) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(bos);
-		oos.writeObject(obj);
-		oos.close();
-		return bos.size();
 	}
 
 	/**

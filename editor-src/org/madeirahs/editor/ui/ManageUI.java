@@ -48,8 +48,9 @@ public class ManageUI extends JDialog {
 	JTextField usr, server, passcode;
 	JButton conn, save, create, restore, remove, adv;
 	JPanel serverpl, passcodepl, usrpl, actions, backupOpts;
-	Box fields, backups;
+	Box fields, backups, localpan, archivepan;
 	JList local, archives;
+	JScrollPane ascroll, lscroll;
 
 	private HashMap<Date, File> localMap = new HashMap<Date, File>();
 	private HashMap<Date, String> archiveMap = new HashMap<Date, String>();
@@ -123,8 +124,8 @@ public class ManageUI extends JDialog {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Dimension size = backups.getSize();
-				local.setPreferredSize(new Dimension(size.width / 2 - 10, size.height / 2));
-				archives.setPreferredSize(new Dimension(size.width / 2 - 10, size.height / 2));
+				local.setMinimumSize(new Dimension(size.width / 2 - 10, size.height / 2));
+				archives.setMinimumSize(new Dimension(size.width / 2 - 10, size.height / 2));
 				backups.validate();
 			}
 
@@ -153,14 +154,14 @@ public class ManageUI extends JDialog {
 			}
 
 		});
-		Box localpan = Box.createVerticalBox();
+		localpan = Box.createVerticalBox();
 		localpan.add(new JLabel("Local Backups"));
-		JScrollPane lscroll = new JScrollPane(local);
+		lscroll = new JScrollPane(local);
 		lscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		localpan.add(lscroll);
-		Box archivepan = Box.createVerticalBox();
+		archivepan = Box.createVerticalBox();
 		archivepan.add(new JLabel("Archives"));
-		JScrollPane ascroll = new JScrollPane(archives);
+		ascroll = new JScrollPane(archives);
 		ascroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		archivepan.add(ascroll);
 

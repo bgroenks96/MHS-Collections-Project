@@ -44,28 +44,6 @@ public class Launcher {
 	IOException, ClassNotFoundException, DuplicateArtifactException,
 	InterruptedException {
 		
-		/*
-		ServerFTP.login(); 
-		System.out.println("Fetching Database...");
-		Database db = Database.getInstance(ServerFTP.DB_DIR,
-				ServerFTP.getProvider(), null); 
-		System.out.println((db.getSize() > 0)? "Database downloaded":"Database created"); 
-		if(db.getSize() == 0) {
-			System.out.println("Generating database contents..."); 
-			for(int i=0;i<500;i++) { 
-				Artifact a = Artifact.createGenericArtifact();
-				a.accNum = "a" + i; 
-				db.add(a); 
-			} 
-			System.out.println("Complete");
-		}
-		System.out.println("Beginning sync...");
-		db.sync(ServerFTP.DB_DIR,
-				ServerFTP.DB_ARCHIVE_DIR, ServerFTP.getProvider(), null);
-		System.out.println("Sync successful"); 
-		System.out.println("<exit>");
-		System.exit(0);
-		*/
 		MemoryManagement.init();
 		AppSupport.checkStorageDirs();
 		ServerFTP.login();

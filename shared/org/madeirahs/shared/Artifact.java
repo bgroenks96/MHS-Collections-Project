@@ -167,7 +167,7 @@ public class Artifact implements Serializable, Comparable<Artifact> {
 	 * \\***----------------------------------------***\\
 	 */
 
-	public enum TimeField {
+	public static enum TimeField {
 		OBJECT_DATE("objDate"), SUBMISSION_DATE("subDate");
 
 		private String fieldName;
@@ -181,7 +181,7 @@ public class Artifact implements Serializable, Comparable<Artifact> {
 		}
 	}
 
-	public enum StringField {
+	public static enum StringField {
 		DONOR("donor"), TITLE("title"), DESCRIPTION("desc"), MEDIUM("medium"), ACCESSION_NUMBER(
 				"accNum");
 

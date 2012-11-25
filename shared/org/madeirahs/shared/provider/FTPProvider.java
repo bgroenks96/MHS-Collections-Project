@@ -37,6 +37,8 @@ import org.apache.commons.net.ftp.*;
  * 
  */
 public class FTPProvider implements DataProvider {
+	
+	private static final int SO_TIMEOUT = 0x3938700;
 
 	private FTPClient ftp = new FTPClient();
 	private String address, wkdir = "/", home = wkdir;
@@ -152,6 +154,7 @@ public class FTPProvider implements DataProvider {
 	 * @throws IOException
 	 */
 	protected void init() throws IOException {
+		ftp.setSoTimeout(SO_TIMEOUT);
 		ftp.enterLocalPassiveMode(); // should help to avoid any issues with
 		// firewalls
 		ftp.setFileType(FTP.BINARY_FILE_TYPE); // All file transfers by

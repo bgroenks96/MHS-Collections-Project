@@ -1154,6 +1154,7 @@ public class MainUI extends JFrame {
 				try {
 					preview.elem.configure3D(bundle);
 					preview.rebuild();
+					preview.updateV3D();
 					preview.validate();
 				} catch (V3DException e1) {
 					e1.printStackTrace();

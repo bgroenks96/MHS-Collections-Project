@@ -145,7 +145,6 @@ public class ArtifactView extends JPanel {
 		accNum.setText(SHTML + ACC_NUM + elem.accNum + EHTML);
 		descView.setText(elem.desc);
 		descView.setCaretPosition(0);
-		updateV3D();
 		validate();
 	}
 
