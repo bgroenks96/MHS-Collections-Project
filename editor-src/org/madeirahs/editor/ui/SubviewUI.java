@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project editor is intended for use by Historical Society members
  *  to edit, review and upload artifact information.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
 // *  The MHS-Collections Project editor is intended for use by Historical Society members
  *  to edit, review and upload artifact information.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,7 +136,6 @@ public class MainUI extends JFrame {
 		buildGUI();
 
 		setContentPane(rootPanel);
-		// setSize(1050, 850);
 		pack();
 		setLocationRelativeTo(null);
 		validate();
@@ -591,9 +590,8 @@ public class MainUI extends JFrame {
 	 * 
 	 * @param a
 	 *            the LocalArtifact to load.
-	 * @param remote
-	 *            true if this SavedArtifact is being loaded from a remote
-	 *            server, false if from the local file system.
+	 * @param prov
+	 * 			  the FTPProvider to use
 	 */
 	public void loadArtifactFromServer(Artifact a, FTPProvider prov) {
 

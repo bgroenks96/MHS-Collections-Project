@@ -45,7 +45,7 @@ public class AboutUI extends JDialog {
 		crt.setBackground(new Color(0,0,0,0));
 		crt.setBorder(null);
 		crt.setEditable(false);
-		crt.setMaximumSize(new Dimension(head.getPreferredSize().width, 1000));
+		crt.setMaximumSize(new Dimension(head.getPreferredSize().width, 500));
 		crt.setText(copyright);
 		
 		Box info = Box.createVerticalBox();
@@ -72,7 +72,9 @@ public class AboutUI extends JDialog {
 			for(String s:pkgStrings) {
 				JPanel p = new JPanel();
 				((FlowLayout)p.getLayout()).setAlignment(FlowLayout.LEFT);
-				p.add(new JLabel(s));
+				JLabel label = new JLabel(s);
+				label.setFont(new Font("Arial", Font.PLAIN, 12));
+				p.add(label);
 				info.add(p);
 			}
 			
@@ -83,9 +85,7 @@ public class AboutUI extends JDialog {
 		
 		add(BorderLayout.CENTER, info);
 		
-		pack();
-		
-		setSize(head.getPreferredSize().width, getHeight());
+		setSize(Math.max(head.getPreferredSize().width, info.getPreferredSize().width), 400);
 		setLocationRelativeTo(parent);
 		setResizable(false);
 	}

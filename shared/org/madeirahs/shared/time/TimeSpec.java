@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ public abstract class TimeSpec implements Serializable {
 	public abstract Date getStartDate();
 
 	/**
-	 * End date for time ranges of the date for a single time.
+	 * End date for time ranges or the date for a single time.
 	 * 
 	 * @return the corresponding Date object or null if not specified by this
 	 *         TimeSpec
@@ -95,7 +95,7 @@ public abstract class TimeSpec implements Serializable {
 	public abstract boolean contains(Date date);
 
 	/**
-	 * Tests to see if thsi TimeSpec contains or is equivalent to the specified
+	 * Tests to see if this TimeSpec contains or is equivalent to the specified
 	 * Date.
 	 * 
 	 * @param ts
@@ -106,6 +106,7 @@ public abstract class TimeSpec implements Serializable {
 
 	/**
 	 * Return a string representation of this TimeSpec for human reading.
+	 * The default implementation by TimeSpec simply returns <code>forcedValue</code>.
 	 * 
 	 * @return a human-comprehensible representation of the time.
 	 */

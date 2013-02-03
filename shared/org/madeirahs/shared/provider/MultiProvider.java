@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -203,9 +203,9 @@ public class MultiProvider implements DataProvider {
 	 * MultiProvider - Uses command target.
 	 */
 	@Override
-	public void rename(String fileName, String newTarget) throws IOException,
+	public boolean rename(String fileName, String newTarget) throws IOException,
 			UnsupportedOperationException {
-		providers.get(cmdTarget).rename(fileName, newTarget);
+		return providers.get(cmdTarget).rename(fileName, newTarget);
 	}
 
 	/**

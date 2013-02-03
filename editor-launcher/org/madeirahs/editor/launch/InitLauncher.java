@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project editor is intended for use by Historical Society members
  *  to edit, review and upload artifact information.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,8 +82,9 @@ public class InitLauncher {
 
 		File appFile = new File(AppSupport.BIN_DIR + File.separator + JAR_NAME);
 
-		String filepath = "\"" + appFile + "\"";
-		String[] cmdset = new String[] { "javaw", "-Xmx" + HEAP_RAM_MAX,
+		String filepath = appFile.toString();
+		//String filepath = "\"" + appFile + "\"";
+		String[] cmdset = new String[] { "java", "-client", "-Xmx" + HEAP_RAM_MAX,
 				"-XX:MaxHeapFreeRatio=" + MAX_FREE_RATIO,
 				"-XX:MinHeapFreeRatio=" + MIN_FREE_RATIO, "-jar", filepath,
 				System.getProperty("user.dir") };
@@ -113,6 +114,7 @@ public class InitLauncher {
 		try {
 			ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(UPDATE_LOG_FILE));
 			Log log = (Log) objIn.readObject();
+			objIn.close();
 			long curr = Calendar.getInstance().getTimeInMillis();
 			long last = log.time.getTimeInMillis();
 			return (curr - last) > interval;
@@ -258,6 +260,7 @@ public class InitLauncher {
 		prog.close();
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	/**
 	 * @deprecated Replaced by network-based updating.

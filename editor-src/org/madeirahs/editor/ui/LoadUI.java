@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project editor is intended for use by Historical Society members
  *  to edit, review and upload artifact information.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,10 +49,6 @@ public class LoadUI extends JDialog {
 
 	private static final String LOCAL_TAB_NAME = "Local",
 			SERVER_TAB_NAME = "Server";
-	/**
-	 * Believed position of the file pane component in JFileChooser
-	 */
-	private static final int FILE_PANE_POS = 2;
 
 	private static File lastLocation;
 

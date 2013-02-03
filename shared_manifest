@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Created-By: 1.6.0 (Sun Microsystems Inc.)
 Name: org/madeirahs/shared/
 Specification-Title: MHS Collections Shared Library
-Specification-Version: 1.0.6
+Specification-Version: 1.0.7
 Specification-Vendor: Madeira Historical Society
 Implementation-Title: org.madeirahs.shared
-Implementation-Version: 0.42-003
+Implementation-Version: 0.43-001
 Implementation-Vendor: Madeira Historical Society

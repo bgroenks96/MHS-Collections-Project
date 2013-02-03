@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class ArtifactView extends JPanel {
 	 */
 	private static final long serialVersionUID = -4264988628541725443L;
 
-	private static final String SHTML = "<html>", EHTML = "</html>",
+	private static final String SHTML = "<html><font size=3>", EHTML = "</font></html>",
 			TITLE = "<b>Title:</b> ", DONOR = "<b>Donor:</b> ",
 			SUB_DATE = "<b>Date of Submission:</b> ",
 			OBJ_DATE = "<b>Date of Object:</b> ", MEDIUM = "<b>Medium:</b> ",
@@ -96,7 +96,8 @@ public class ArtifactView extends JPanel {
 		gbc.gridy = 9;
 		add(accNum, gbc);
 		desc = new JLabel(SHTML + DESC + EHTML);
-		gbc.anchor = GridBagConstraints.EAST;
+		//gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.insets = new Insets(0, 50, 0, 0);
 		gbc.gridy = 4;
 		gbc.gridx = 2;
 		add(desc, gbc);
@@ -104,9 +105,10 @@ public class ArtifactView extends JPanel {
 		descView.setLineWrap(true);
 		descView.setWrapStyleWord(true);
 		descView.setEditable(false);
+		descView.setText(elem.desc);
 		descView.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane(descView);
-		scrollPane.setPreferredSize(new Dimension(175, 100));
+		scrollPane.setPreferredSize(new Dimension(225, 100));
 		// scrollPane.setBorder(null);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -116,7 +118,7 @@ public class ArtifactView extends JPanel {
 		gbc.gridx = 2;
 		add(scrollPane, gbc);
 
-		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = null;
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		gbc.gridwidth = 4;

@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ public class Database implements Serializable {
 	private static final long serialVersionUID = 1996081993674943784L;
 
 	public static String DB_SUFFIX = ".store", DATABASE = "database" + DB_SUFFIX,
-			DB_ENTRY_SUFFIX = ".database", DB_TMP_STORE = "tmpstore", DB_ARCHIVE_NAME_SEP = "_";
+			DB_ENTRY_SUFFIX = ".database", DB_TMP_STORE = "tmpstore", DB_ARCHIVE_NAME_SEP = "_", UNIQUE_ID_FLAG = "#%%#";
 
 	private static int DL_BUFF_SIZE = 5120, DB_STORE_COMPRESSION_LEVEL = 9; // 0-9; 9 being max
 																			// compression
@@ -66,8 +66,8 @@ public class Database implements Serializable {
 	 * Downloads, extracts, and creates an instance of Database currently published on the FTP server.
 	 * @param loc
 	 *            the relative directory location of the Database file.
-	 * @param prov
-	 * @param prog
+	 * @param prov DataProvider able to locate the database store file.
+	 * @param prog ProgressMonitor that will be given progress updates.  May be null.
 	 * @return
 	 * @throws IOException
 	 * @throws ClassNotFoundException
@@ -106,6 +106,7 @@ public class Database implements Serializable {
 			zipin.close();
 			throw (new DatabaseException("found invalid entry: " + dbentry.getName()));
 		}
+		@SuppressWarnings("resource")
 		InputStream instream = (prog != null) ? new MonitoredInStream(zipin,
 				prog, (dbentry.getSize() > 0) ? dbentry.getSize():bos.size()) : zipin;
 		ObjectInputStream objIn = new ObjectInputStream(instream);
@@ -270,7 +271,7 @@ public class Database implements Serializable {
 	 * @throws DuplicateArtifactException
 	 *             if the artifact already exists in the database. This exception should be caught
 	 *             and processed accordingly.
-	 * @see {@link addAndOverwrite(Artifact)}
+	 * @see #addAndOverwrite(Artifact)
 	 */
 	public synchronized void add(Artifact e) throws DuplicateArtifactException {
 		_add(e, false);
@@ -287,7 +288,7 @@ public class Database implements Serializable {
 	 * 
 	 * @param e
 	 *            the Artifact to add or overwrite
-	 * @see {@link add(Artifact)}
+	 * @see #add(Artifact)
 	 */
 	public synchronized void addAndOverwrite(Artifact e) {
 		try {
@@ -446,7 +447,7 @@ public class Database implements Serializable {
 	 * @param field denotes which time-related Artifact attribute to obtain.
 	 * @param query the Artifact to be used as the query; only the specified field will be evaluated
 	 * @return an array of relevant search results.
-	 * @see {@link StringCrawler} {@link searchByField(TimeField, Artifact)} {@link searchByField(StringField, Artifact)}
+	 * @see #StringCrawler #searchByField(TimeField, Artifact) #searchByField(StringField, Artifact)
 	 */
 	public Artifact[] searchByFieldHybrid(TimeField field, Artifact query) {
 		Artifact[] found = null;
@@ -492,11 +493,12 @@ public class Database implements Serializable {
 		Artifact[] found = null;
 		String fieldName = field.getFieldName();
 		synchronized (dataLock) {
-			// Create a map so we can identify the orignal Artifacts after
+			// Create a map so we can identify the original Artifacts after
 			// searching the values.
 			HashMap<String, Artifact> mapvals = new HashMap<String, Artifact>();
-			for (Artifact a : data) {
-				mapvals.put(strfield(a, fieldName), a);
+			for (int i = 0; i < data.length;i++) {
+				Artifact a = data[i];
+				mapvals.put(strfield(a, fieldName) + UNIQUE_ID_FLAG + i, a);
 			}
 
 			String qstr = strfield(query, fieldName);
@@ -518,6 +520,7 @@ public class Database implements Serializable {
 			}
 			found = Arrays.copyOf(found, fc);
 		}
+		
 		return found;
 	}
 
@@ -605,10 +608,12 @@ public class Database implements Serializable {
 		 */
 		@Override
 		public int compare(String a, String b) {
+			a = a.substring(0, a.indexOf(UNIQUE_ID_FLAG));
+			b = b.substring(0, b.indexOf(UNIQUE_ID_FLAG));
 			int aptn = 0, bptn = 0;
 			aptn = _compare(a);
 			bptn = _compare(b);
-
+			
 			if (aptn > bptn) {
 				return 1;
 			} else if (aptn == bptn) {
@@ -620,6 +625,7 @@ public class Database implements Serializable {
 		
 		@Override
 		public boolean isRelevant(String a) {
+			a = a.substring(0, a.indexOf(UNIQUE_ID_FLAG));
 			int aptn = _compare(a);
 			return aptn >= 1;
 		}

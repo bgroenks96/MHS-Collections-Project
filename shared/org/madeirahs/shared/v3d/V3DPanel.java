@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -493,7 +493,6 @@ public class V3DPanel extends JPanel {
 			} else {
 				// NOTE that the repetitive nature of this if/else scheme is not ideal and should be candidate
 				// for future improvement.
-				System.out.println("Reading image data...");
 				if (!provider.isAvailable()) {
 					failed = true;
 					loaded = false;
@@ -506,7 +505,7 @@ public class V3DPanel extends JPanel {
 					return;
 				}
 				for (int i = 0; i < rscs.length; i++) {
-					System.out.println("Configuring image " + (i+1) + " of " + rscs.length);
+					System.out.println("Reading image " + (i+1) + " of " + rscs.length);
 					try {
 						rscs[i] = provider.loadImage(rscNames[i]);
 						if (rscs[i] == null) {
@@ -524,6 +523,8 @@ public class V3DPanel extends JPanel {
 						loading = false;
 						return;
 					}
+					
+					System.out.println("Configuring image " + (i+1) + " of " + rscs.length);
 					int wt, ht;
 					 /*
 					 * If the image is too big for the panel, scale it to maximum

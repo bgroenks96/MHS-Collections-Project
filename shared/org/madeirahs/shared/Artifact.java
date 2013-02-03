@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -150,6 +150,11 @@ public class Artifact implements Serializable, Comparable<Artifact> {
 	public boolean is3DSupported() {
 		return v3d;
 	}
+	
+	@Override
+	public String toString() {
+		return accNum;
+	}
 
 	public static Artifact createGenericArtifact() {
 		return new Artifact(new DateTime(Calendar.getInstance().getTime(),
@@ -160,8 +165,8 @@ public class Artifact implements Serializable, Comparable<Artifact> {
 	}
 
 	/*
-	 * \\***----------------------------------------***\\ Make sure to update
-	 * the constructors for each field in the following two enums if Artifact's
+	 * \\***----------------------------------------***\\ 
+	 * Make sure to update the constructors for each field in the following two enums if Artifact's
 	 * field names are changed. Failure to do this will cause catastrophic
 	 * problems with the Database search algorithms.
 	 * \\***----------------------------------------***\\

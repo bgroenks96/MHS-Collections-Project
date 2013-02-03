@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project shared library is intended for use by both the applet
  *  and editor software in the interest of code consistency.
- *  Copyright © 2012-  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -308,8 +308,8 @@ public class FTPProvider implements DataProvider {
 	/**
 	 * Logout and disconnect from the server.  Note that all methods will most likely throw some sort of IOException
 	 * until <code>reconnect</code> is called.
-	 * @see reconnect(String)
-	 * @see reconnect(String,String,String)
+	 * @see #reconnect(String)
+	 * @see #reconnect(String,String,String)
 	 * @throws IOException
 	 */
 	public void disconnect() throws IOException {
@@ -511,14 +511,14 @@ public class FTPProvider implements DataProvider {
 	/**
 	 * Renames a file at the specified pathname.
 	 * 
-	 * @param from
+	 * @param fileName
 	 *            path of the current file
-	 * @param to
+	 * @param newTarget
 	 *            new path of the file
 	 * @return true if successful, false otherwise.
 	 */
 	@Override
-	public void rename(String fileName, String newTarget) throws IOException {
+	public boolean rename(String fileName, String newTarget) throws IOException {
 		if (!exists(fileName)) {
 			throw (new FileNotFoundException(fileName));
 		}
@@ -527,8 +527,9 @@ public class FTPProvider implements DataProvider {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		ftp.rename(fileName, newTarget);
+		boolean success = ftp.rename(fileName, newTarget);
 		guard.release();
+		return success;
 	}
 
 	/**
@@ -736,6 +737,7 @@ public class FTPProvider implements DataProvider {
 		public void run() {
 			while (login) {
 				try {
+					ftp.setSoTimeout((int) (INTERVAL * 1.5));
 					lastPingTime = ping();
 					Thread.sleep(INTERVAL); // wait set amount of time - see
 					// INTERVAL field above

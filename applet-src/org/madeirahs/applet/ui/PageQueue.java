@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project applet contains the projects primary front-end
  *  code deployed on the website for use by end-users.
- *  Copyright © 2012  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,35 +21,41 @@
 
 package org.madeirahs.applet.ui;
 
+import java.awt.*;
 import java.util.*;
 
 public class PageQueue {
 	
-	LinkedList<PageView> queue = new LinkedList<PageView>();
+	LinkedList<Container> queue = new LinkedList<Container>();
 	int currPos = 0;
 	
-	public PageView getCurrent() {
+	public Container getCurrent() {
 		return queue.get(currPos);
 	}
 	
-	public PageView addNew(PageView npv) {
-		for(int i=currPos+1;i<queue.size();i++) {
+	public Container getPrevious() {
+		return (currPos < queue.size() - 1) ? queue.get(currPos + 1):queue.get(currPos);
+	}
+	
+	public Container addNew(Container npv) {
+		for(int i=currPos-1;i >= 0;i--) {
 			queue.pop();
 		}
 		
 		queue.push(npv);
+		forward();
 		return npv;
 	}
 	
-	public PageView back() {
-		if(currPos > 0)
-			currPos--;
+	public Container back() {
+		if(currPos < queue.size() - 1)
+			currPos++;
 		return queue.get(currPos);
 	}
 	
-	public PageView forward() {
-		if(currPos < queue.size() - 1)
-			currPos++;
+	public Container forward() {
+		if(currPos > 0)
+			currPos--;
 		return queue.get(currPos);
 	}
 	
@@ -59,5 +65,9 @@ public class PageQueue {
 	
 	public boolean isBack() {
 		return currPos == 0;
+	}
+	
+	public void clear() {
+		queue.clear();
 	}
 }

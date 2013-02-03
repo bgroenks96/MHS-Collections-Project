@@ -1,7 +1,7 @@
 /*
  *  The MHS-Collections Project applet contains the projects primary front-end
  *  code deployed on the website for use by end-users.
- *  Copyright © 2012  Madeira Historical Society (developed by Brian Groenke)
+ *  Copyright Â© 2012-2013 Madeira Historical Society (developed by Brian Groenke)
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,10 @@ package org.madeirahs.applet.ui;
 
 import java.awt.*;
 
-public interface PageView {
+public abstract class PageView extends Container {
 	
-	public Container getRoot();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5343961693514786833L;
 }
