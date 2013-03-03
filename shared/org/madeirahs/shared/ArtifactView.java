@@ -28,6 +28,7 @@ import javax.swing.*;
 import org.madeirahs.shared.provider.*;
 import org.madeirahs.shared.time.*;
 import org.madeirahs.shared.v3d.*;
+import org.madeirahs.shared.v3d.V3DPanel.LoaderCallback;
 
 /**
  * 
@@ -152,5 +153,13 @@ public class ArtifactView extends JPanel {
 
 	public void updateV3D() {
 		vpan.setImageDataFromArtifact(elem);
+	}
+	
+	public void addLoaderCallback(LoaderCallback lc) {
+		vpan.addLoadCallback(lc);
+	}
+	
+	public void removeLoaderCallback(LoaderCallback lc) {
+		vpan.removeLoadCallback(lc);
 	}
 }

@@ -106,7 +106,6 @@ public class Database implements Serializable {
 			zipin.close();
 			throw (new DatabaseException("found invalid entry: " + dbentry.getName()));
 		}
-		@SuppressWarnings("resource")
 		InputStream instream = (prog != null) ? new MonitoredInStream(zipin,
 				prog, (dbentry.getSize() > 0) ? dbentry.getSize():bos.size()) : zipin;
 		ObjectInputStream objIn = new ObjectInputStream(instream);

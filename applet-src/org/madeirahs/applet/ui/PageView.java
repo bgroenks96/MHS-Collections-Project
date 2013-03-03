@@ -21,12 +21,18 @@
 
 package org.madeirahs.applet.ui;
 
-import java.awt.*;
+import javax.swing.*;
 
-public abstract class PageView extends Container {
+public abstract class PageView extends JPanel {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5343961693514786833L;
+	
+	protected String navMsg = NavBar.DEFAULT_NAV_MSG;
+	
+	public String getCurrentNavMsg() {
+		return navMsg;
+	}
 }

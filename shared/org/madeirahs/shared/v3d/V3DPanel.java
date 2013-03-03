@@ -25,6 +25,7 @@ import java.awt.geom.*;
 import java.awt.image.*;
 import java.io.*;
 import java.lang.ref.*;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -52,6 +53,7 @@ public class V3DPanel extends JPanel {
 	private volatile boolean v3d, loaded;
 	private int currFrame = V3DBundle.FRONT;
 	private V3DPanel instance;
+	private Set<LoaderCallback> callbacks = new HashSet<LoaderCallback>();
 
 	public V3DPanel(DataProvider provider) {
 		this.provider = provider;
@@ -311,7 +313,7 @@ public class V3DPanel extends JPanel {
 	 * @author Brian Groenke
 	 * 
 	 */
-	private class V3DHandler extends MouseAdapter {
+	protected class V3DHandler extends MouseAdapter {
 
 		volatile int sens = 100; // default sensitivity is 100 pixels
 
@@ -427,6 +429,7 @@ public class V3DPanel extends JPanel {
 										+ " provider was not available.",
 								"Failed to load image data",
 								JOptionPane.ERROR_MESSAGE);
+						notifyCallbacks(false);
 						return;
 					}
 					rscs[V3DBundle.FRONT] = provider
@@ -502,6 +505,7 @@ public class V3DPanel extends JPanel {
 									+ " provider was not available.",
 							"Failed to load image data",
 							JOptionPane.ERROR_MESSAGE);
+					notifyCallbacks(false);
 					return;
 				}
 				for (int i = 0; i < rscs.length; i++) {
@@ -521,6 +525,7 @@ public class V3DPanel extends JPanel {
 								"Failed to load image data",
 								JOptionPane.ERROR_MESSAGE);
 						loading = false;
+						notifyCallbacks(false);
 						return;
 					}
 					
@@ -554,6 +559,8 @@ public class V3DPanel extends JPanel {
 				loaded = true;
 				repaint();
 			}
+			
+			notifyCallbacks(loaded);
 		}
 
 		public void reset() {
@@ -562,5 +569,23 @@ public class V3DPanel extends JPanel {
 			failed = false;
 			currFrame = 0;
 		}
+	}
+	
+	public void addLoadCallback(LoaderCallback lc) {
+		callbacks.add(lc);
+	}
+	
+	public void removeLoadCallback(LoaderCallback lc) {
+		callbacks.remove(lc);
+	}
+	
+	private synchronized void notifyCallbacks(boolean success) {
+		for(LoaderCallback lc:callbacks) {
+			lc.onFinish(success);
+		}
+	}
+	
+	public static interface LoaderCallback {
+		public void onFinish(boolean success);
 	}
 }

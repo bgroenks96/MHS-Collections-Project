@@ -278,7 +278,8 @@ public class MainUI extends JFrame {
 		c1.gridheight = 4;
 		c1.gridwidth = 3;
 		c1.insets = SPACE_BOTTOM;
-		fieldPanel.add(descArea, c1);
+		fieldPanel.add(new JScrollPane(descArea), c1);
+		
 		JLabel rscs = new JLabel("Resources");
 		rscs.setFont(DEFAULT_LABEL_FONT);
 		c1.insets = NO_SPACE;

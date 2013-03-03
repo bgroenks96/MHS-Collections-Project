@@ -35,6 +35,8 @@ public class NavBar extends Box {
 	 * 
 	 */
 	private static final long serialVersionUID = -7502260781158532688L;
+	
+	public static final String DEFAULT_NAV_MSG = "Madeira Historical Society Collections Database";
 
 	private static final int HEIGHT_DIV = 22;
 
@@ -48,6 +50,7 @@ public class NavBar extends Box {
 
 	CollectionsApplet context;
 
+	JLabel navMsg;
 	JButton back, forward, help;
 
 	public NavBar(CollectionsApplet context) throws MalformedURLException {
@@ -83,10 +86,10 @@ public class NavBar extends Box {
 		add(Box.createHorizontalStrut(5));
 		add(forward);
 		add(Box.createHorizontalGlue());
-		JLabel label = new JLabel("Welcome to the Madeira Historical Society Artifact Database!");
-		label.setFont(new Font("Century", Font.PLAIN, 12));
-		label.setForeground(Color.WHITE);
-		add(label);
+		navMsg = new JLabel(DEFAULT_NAV_MSG);
+		navMsg.setFont(new Font("Century", Font.PLAIN, 12));
+		navMsg.setForeground(Color.WHITE);
+		add(navMsg);
 		add(Box.createHorizontalGlue());
 		add(help);
 	}
@@ -97,13 +100,18 @@ public class NavBar extends Box {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		super.paintComponent(g);
 	}
+	
+	public void setMessage(String msg) {
+		navMsg.setText(msg);
+	}
 
 	private class BackListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Container prev = context.getPageQueue().getCurrent();
-			context.getPageQueue().back();
+			PageView prev = context.getPageQueue().getCurrent();
+			PageView curr = context.getPageQueue().back();
+			setMessage(curr.getCurrentNavMsg());
 			context.updateView(prev);
 		}
 
@@ -113,8 +121,9 @@ public class NavBar extends Box {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Container prev = context.getPageQueue().getCurrent();
-			context.getPageQueue().forward();
+			PageView prev = context.getPageQueue().getCurrent();
+			PageView curr = context.getPageQueue().forward();
+			setMessage(curr.getCurrentNavMsg());
 			context.updateView(prev);
 		}
 

@@ -21,23 +21,22 @@
 
 package org.madeirahs.applet.ui;
 
-import java.awt.*;
 import java.util.*;
 
 public class PageQueue {
 	
-	LinkedList<Container> queue = new LinkedList<Container>();
+	LinkedList<PageView> queue = new LinkedList<PageView>();
 	int currPos = 0;
 	
-	public Container getCurrent() {
+	public PageView getCurrent() {
 		return queue.get(currPos);
 	}
 	
-	public Container getPrevious() {
+	public PageView getPrevious() {
 		return (currPos < queue.size() - 1) ? queue.get(currPos + 1):queue.get(currPos);
 	}
 	
-	public Container addNew(Container npv) {
+	public PageView addNew(PageView npv) {
 		for(int i=currPos-1;i >= 0;i--) {
 			queue.pop();
 		}
@@ -47,13 +46,13 @@ public class PageQueue {
 		return npv;
 	}
 	
-	public Container back() {
+	public PageView back() {
 		if(currPos < queue.size() - 1)
 			currPos++;
 		return queue.get(currPos);
 	}
 	
-	public Container forward() {
+	public PageView forward() {
 		if(currPos > 0)
 			currPos--;
 		return queue.get(currPos);

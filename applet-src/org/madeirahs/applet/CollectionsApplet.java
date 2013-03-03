@@ -132,6 +132,10 @@ public class CollectionsApplet extends JApplet {
 		}).start();
 	}
 
+	/**
+	 * 
+	 * @param prev the previous Component that should be removed
+	 */
 	public void updateView(Component prev) {
 		if(prev != null)
 			root.remove(prev);
@@ -156,6 +160,10 @@ public class CollectionsApplet extends JApplet {
 		}
 
 		return null;
+	}
+	
+	public NavBar getNavBar() {
+		return nav;
 	}
 
 	@Override

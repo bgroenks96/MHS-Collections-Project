@@ -37,7 +37,7 @@ import org.madeirahs.shared.database.ArtifactSorter.Mode;
 import org.madeirahs.shared.database.ArtifactSorter.Variable;
 
 
-public class MainView extends JPanel {
+public class MainView extends PageView {
 
 	/**
 	 * 
@@ -68,6 +68,7 @@ public class MainView extends JPanel {
 
 	public MainView(CollectionsApplet context) {
 		super();
+		super.navMsg = NavBar.DEFAULT_NAV_MSG;
 		this.context = context;
 		setOpaque(false);
 		setLayout(new BorderLayout());
@@ -296,9 +297,12 @@ public class MainView extends JPanel {
 			context.repaint();
 			if(inside) {
 				PageQueue pq = context.getPageQueue();
-				Container prev = pq.getCurrent();
-				pq.addNew(new ArtifactView(selectionMap.get(e.getComponent()), context.getProvider()));
+				PageView prev = pq.getCurrent();
+				Artifact a = selectionMap.get(e.getComponent());
+				PageView pv = new ArtifactPageView(new ArtifactView(a, context.getProvider()), context);
+				pq.addNew(pv);
 				context.updateView(prev);
+				context.getNavBar().setMessage(pv.getCurrentNavMsg());
 			}
 		}
 
