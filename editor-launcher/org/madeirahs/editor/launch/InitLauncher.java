@@ -48,8 +48,8 @@ public class InitLauncher {
 	public static final File UPDATE_LOG_FILE = new File(AppSupport.SYS_DIR + File.separator + "updateLog.ser");
 	public static Log log = new Log();
 
-	public static final String LIB1 = "commons-net-3.0.1.jar",
-			LIB2 = "shared-lib.jar";
+	public static final String LIB1 = "commons-net.jar",
+			LIB2 = "shared-lib.jar", LIB3 = "seaglasslookandfeel-0.2.jar", OLD_LIB = "commons-net-3.0.1.jar";
 
 	public static final String URL_BASE = "http://www.madeirahs.org/collection/bin/", JAR_URL_BASE = "jar:"+URL_BASE, JAR_SUFFIX = "!/";
 
@@ -65,7 +65,7 @@ public class InitLauncher {
 		if(update) {
 			prog = new ProgressMonitor(null,
 					"Validating software packages...", "Contacting update server... ("+URL_BASE+")", 0,
-					100);
+					101);
 			prog.setMillisToDecideToPopup(0);
 			prog.setMillisToPopup(1000);
 			prog.setProgress(0);
@@ -198,7 +198,8 @@ public class InitLauncher {
 	}
 
 	private static void checkPackages() {
-		final int TOT = 4;
+		checkCompat();
+		final int TOT = 5; // must be updated for additional packages
 		for (int i = 0; i < TOT; i++) {
 			if(prog.isCanceled())
 				break;
@@ -206,19 +207,22 @@ public class InitLauncher {
 			switch (i) {
 			case 0:
 				jarname = JAR_NAME;
-				prog.setProgress(25);
+				prog.setProgress((int)(100.0 / TOT) * (i+1));
 				break;
 			case 1:
 				jarname = LIB1;
-				prog.setProgress(50);
+				prog.setProgress((int)(100.0 / TOT) * (i+1));
 				break;
 			case 2:
 				jarname = LIB2;
-				prog.setProgress(75);
+				prog.setProgress((int)(100.0 / TOT) * (i+1));
 				break;
 			case 3:
 				jarname = UPDATE_JAR;
-				prog.setProgress(99);
+				prog.setProgress((int)(100.0 / TOT) * (i+1));
+			case 4:
+				jarname = LIB3;
+				prog.setProgress((int)(100.0 / TOT) * (i+1));
 			}
 			try {
 				prog.setNote("Verifying software version... (package " + (i+1) + " of " + TOT + ")");
@@ -257,10 +261,20 @@ public class InitLauncher {
 			}
 		}
 
+		try {
+			Thread.sleep(250); // ensures that the progress window fully updates before closing
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		prog.close();
 	}
+	
+	private static void checkCompat() {
+		File jar1 = new File(AppSupport.BIN_DIR + File.separator + OLD_LIB);
+		if(jar1.exists())
+			jar1.delete();
+	}
 
-	@SuppressWarnings("unused")
 	@Deprecated
 	/**
 	 * @deprecated Replaced by network-based updating.

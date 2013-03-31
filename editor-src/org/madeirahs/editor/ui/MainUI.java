@@ -29,7 +29,6 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
@@ -108,6 +107,7 @@ public class MainUI extends JFrame {
 	InstantiationException, IllegalAccessException,
 	UnsupportedLookAndFeelException, ParseException, IOException {
 
+		/*
 		boolean lfset = false;
 		for (LookAndFeelInfo linf : UIManager.getInstalledLookAndFeels()) {
 			if (linf.getClassName().toLowerCase().contains("nimbus")) {
@@ -119,6 +119,8 @@ public class MainUI extends JFrame {
 		if (!lfset) {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
+		*/
+		UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
 
 		setTitle(windowTitle);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -131,7 +133,7 @@ public class MainUI extends JFrame {
 		buildMenuBar();
 
 		rootPanel = new JPanel(new BorderLayout());
-		rootPanel.setBackground(new Color(0xE6EBF0));
+		//rootPanel.setBackground(new Color(0xE6EBF0));
 
 		buildGUI();
 
@@ -265,7 +267,7 @@ public class MainUI extends JFrame {
 		c1.gridwidth = 1;
 		fieldPanel.add(desc, c1);
 		// Description area
-		descArea = new JTextArea(10, 30);
+		descArea = new JTextArea(8, 30);
 		descArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		descArea.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 		descArea.setLineWrap(true);
@@ -1037,7 +1039,7 @@ public class MainUI extends JFrame {
 				posbox.setBorder(new EmptyBorder(10, 20, 20, 20));
 				String[] names = new String[nameMap.keySet().size() + 1];
 				int a = 0;
-				names[a] = " ";
+				names[a] = "";
 				for (String s : nameMap.keySet()) {
 					a++;
 					names[a] = s;
@@ -1063,6 +1065,7 @@ public class MainUI extends JFrame {
 
 				if (preview.elem.is3DSupported()) {
 					V3DBundle bundle = preview.elem.bundle;
+					String[] v3dnames = bundle.getFinalImageArray();
 
 					outer: for (int i = 0; i < positions.length; i++) {
 						switch (i) {
@@ -1078,7 +1081,15 @@ public class MainUI extends JFrame {
 								break outer;
 							}
 						}
-						map.get(positions[i]).setSelectedItem(names[i+1]);
+						
+						for(String t:names) {
+							if(t == null || t.isEmpty())
+								continue;
+							if(v3dnames[i].contains(t)) {
+								map.get(positions[i]).setSelectedItem(t);
+								break;
+							}
+						}
 					}
 				}
 
@@ -1115,7 +1126,7 @@ public class MainUI extends JFrame {
 				String[] names = new String[positions.length];
 				V3DBundle bundle = null;
 				for (int i = 0; i < positions.length; i++) {
-					if (nameMap.keySet().size() - 1 < i) {
+					if (nameMap.keySet().size() < i) {
 						break;
 					}
 					String str = (String) map.get(positions[i])
@@ -1123,9 +1134,7 @@ public class MainUI extends JFrame {
 					names[i] = nameMap.get(str);
 					switch (i) {
 					case 0:
-						break;
 					case 1:
-						break;
 					case 2:
 						break;
 					case 3:
@@ -1149,6 +1158,8 @@ public class MainUI extends JFrame {
 						}
 					}
 				}
+				
+				System.out.println(bundle.getBundleType() == V3DBundle.BUNDLE_TYPE_TOP);
 
 				try {
 					preview.elem.configure3D(bundle);

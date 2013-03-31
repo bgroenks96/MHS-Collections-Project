@@ -33,6 +33,7 @@ import org.madeirahs.editor.net.*;
 import org.madeirahs.shared.*;
 import org.madeirahs.shared.misc.*;
 import org.madeirahs.shared.provider.*;
+import org.madeirahs.shared.v3d.*;
 
 /**
  * Handles I/O and displays a UI for uploading artifact data to the server. The
@@ -105,10 +106,25 @@ public class UploadUI {
 		fileArrCopy = Arrays.copyOf(a.filenames, a.filenames.length);
 		String[] fn = a.filenames;
 		for (int i = 0; i < fn.length; i++) {
+			fn[i] = fn[i].replaceAll("\\\\", "/");
 			String[] pts = fn[i].split("/");
 			fn[i] = pts[pts.length - 1];
 			fn[i] = ServerFTP.rscDir + fn[i];
 		}
+		
+		if(!a.is3DSupported())
+			return;
+		
+		String[] v3d = a.bundle.getFinalImageArray();
+		for(int i = 0; i < v3d.length; i++) {
+			if(v3d[i] == null || v3d[i].isEmpty())
+				continue;
+			v3d[i] = v3d[i].replaceAll("\\\\", "/");
+			String[] pts = v3d[i].split("/");
+			v3d[i] = pts[pts.length - 1];
+			v3d[i] = ServerFTP.rscDir + v3d[i];
+		}
+		a.bundle = new V3DBundle(v3d, a.bundle.getBundleType());
 	}
 
 	protected void upload() {
@@ -168,8 +184,7 @@ public class UploadUI {
 	}
 
 	private static final String PTH = ServerFTP.rscDir;
-	private static final int BUFF_SIZE = 8192; // 8 kB - standard CPU/disk
-												// transfer
+	private static final int BUFF_SIZE = 0x2000; //8kB
 
 	private void uploadResources() {
 		String[] filenames = fileArrCopy;
@@ -194,10 +209,8 @@ public class UploadUI {
 			String prt = pts[pts.length - 1];
 			prt = PTH + prt + PAR_EXT;
 			try {
-				BufferedOutputStream out = new BufferedOutputStream(
-						ftp.getOutputStream(prt));
-				BufferedInputStream in = new BufferedInputStream(
-						prov.getInputStream(s));
+				OutputStream out = ftp.getOutputStream(prt);
+				BufferedInputStream in = new BufferedInputStream(prov.getInputStream(s));
 				byte[] buff = new byte[BUFF_SIZE];
 				int len;
 				while ((len = in.read(buff)) >= 0 && !prog.isCanceled()) {

@@ -540,7 +540,7 @@ public class ServerFTP {
 			}).start();
 		}
 
-		public void login(String url, String usr, String pass) {
+		public boolean login(String url, String usr, String pass) {
 			try {
 				String addr = readAddress();
 				if(addr != null && !addr.isEmpty())
@@ -567,6 +567,8 @@ public class ServerFTP {
 						"An error occurred:\n" + e1.toString(), "IOException",
 						JOptionPane.ERROR_MESSAGE);
 			}
+			
+			return login;
 		}
 	}
 }

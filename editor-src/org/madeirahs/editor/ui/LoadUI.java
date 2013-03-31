@@ -71,7 +71,7 @@ public class LoadUI extends JDialog {
 		setTitle("Load Artifact");
 		this.addWindowListener(new OnCloseDialog());
 		views = new JTabbedPane();
-		lfiles = new JFileChooser(AppSupport.SAVE_DIR);
+		lfiles = new JFileChooser((lastLocation == null) ? AppSupport.SAVE_DIR:lastLocation);
 		lfiles.setFileFilter(new FileNameExtensionFilter(
 				"Serialized Artifacts", "ser"));
 		lfiles.setControlButtonsAreShown(false);
@@ -112,6 +112,7 @@ public class LoadUI extends JDialog {
 	ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 		SavedArtifact loaded = (SavedArtifact) ois.readObject();
+		ois.close();
 		parent.loadArtifactFromSystem(loaded);
 		dispose();
 	}
@@ -130,6 +131,7 @@ public class LoadUI extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			if (views.getSelectedIndex() == 0) { // Local
 				File f = lfiles.getSelectedFile();
+				lastLocation = lfiles.getCurrentDirectory();
 				if (f != null) {
 					try {
 						loadLocal(f);

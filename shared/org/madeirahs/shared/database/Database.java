@@ -20,6 +20,7 @@
 package org.madeirahs.shared.database;
 
 import java.io.*;
+import java.text.*;
 import java.util.*;
 import java.util.zip.*;
 
@@ -106,6 +107,7 @@ public class Database implements Serializable {
 			zipin.close();
 			throw (new DatabaseException("found invalid entry: " + dbentry.getName()));
 		}
+		@SuppressWarnings("resource")
 		InputStream instream = (prog != null) ? new MonitoredInStream(zipin,
 				prog, (dbentry.getSize() > 0) ? dbentry.getSize():bos.size()) : zipin;
 		ObjectInputStream objIn = new ObjectInputStream(instream);
@@ -708,7 +710,33 @@ public class Database implements Serializable {
 
 		@Override
 		public boolean isRelevant(TimeSpec a) {
-			return a.contains(query);
+			return a.contains(query) || query.contains(a);
+		}
+	}
+	
+	public static enum TimeSearchFormat {
+		
+		FORM_A("MMddyyyy"), FORM_B("yyyy"), FORM_C("MMM dd yyyy"), FORM_D("MMM dd, yyyy"), FORM_E("MMM yyyy"),
+		FORM_F("MM/yyyy"), FORM_G("MM/dd/yyyy");
+		
+		SimpleDateFormat format;
+		
+		TimeSearchFormat(String format) {
+			this.format = new SimpleDateFormat(format);
+		}
+		
+		public Date parse(String time) {
+			Date parsedTime = null;
+			try {
+				parsedTime = format.parse(time);
+			} catch (ParseException e) {
+				// invalid format
+			}
+			return parsedTime;
+		}
+		
+		public SimpleDateFormat getFormat() {
+			return format;
 		}
 	}
 }

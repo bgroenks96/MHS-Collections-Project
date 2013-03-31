@@ -1,4 +1,4 @@
-Copyright Â© 2012-2013  Madeira Historical Society (developed by Brian Groenke).  
+Copyright © 2012-2013  Madeira Historical Society (developed by Brian Groenke).  
 All software distributed under the Madeira Historical Society Collections Project is free and open-source, licensed 
 under the GNU GPL (v.3.0).  The license can be found in the Help and Information Center dialog as well as any 
 downloaded project source packages. 

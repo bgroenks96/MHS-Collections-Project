@@ -42,7 +42,7 @@ public class ManageUI extends JDialog {
 	private static final long serialVersionUID = 3582560499724897259L;
 
 	private static final int TEXT_FIELD_LENGTH = 30;
-	private static final Dimension ACTION_BUTTON_SIZE = new Dimension(100, 30);
+	private static final Dimension ACTION_BUTTON_SIZE = new Dimension(120, 30);
 
 	ManageUI inst = this;
 	JTextField usr, server, passcode;
@@ -419,8 +419,10 @@ public class ManageUI extends JDialog {
 							prog.setMillisToDecideToPopup(0);
 							ZipInputStream zipin = new ZipInputStream(new FileInputStream(f));
 							ZipEntry ze = zipin.getNextEntry();
-							if(!ze.getName().endsWith(Database.DB_ENTRY_SUFFIX))
+							if(!ze.getName().endsWith(Database.DB_ENTRY_SUFFIX)) {
+								zipin.close();
 								return;
+							}
 							ObjectInputStream objIn = new ObjectInputStream(new MonitoredInStream(zipin, prog, f.length()));
 							Database db = (Database) objIn.readObject();
 							objIn.close();

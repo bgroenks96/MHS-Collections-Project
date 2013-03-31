@@ -19,8 +19,8 @@
 
 package org.madeirahs.shared.v3d;
 
-import java.io.Serializable;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 public class V3DBundle implements Serializable {
 
@@ -63,7 +63,7 @@ public class V3DBundle implements Serializable {
 	 *            location of the left view image relative to whatever file
 	 *            system is being used.
 	 */
-	public V3DBundle(String front, String right, String back, String left) {
+	public V3DBundle(String front, String right, String back, String left) throws IllegalArgumentException {
 		imgNames[0] = front;
 		imgNames[1] = right;
 		imgNames[2] = back;
@@ -75,6 +75,22 @@ public class V3DBundle implements Serializable {
 			}
 		}
 		bundleType = BUNDLE_TYPE_LEVEL;
+	}
+	
+	public V3DBundle(String[] imgs, int bundleType) throws IllegalArgumentException {
+		if(imgs.length < 4 || imgs.length > 6)
+			throw(new IllegalArgumentException("invalid number of images for V3D"));
+		imgNames[0] = imgs[0];
+		imgNames[1] = imgs[1];
+		imgNames[2] = imgs[2];
+		imgNames[3] = imgs[3];
+		if (bundleType == BUNDLE_TYPE_TOP) {
+			setTopOnly(imgs[TOP]);
+		} else if (bundleType == BUNDLE_TYPE_BOTTOM) {
+			setBottomOnly(imgs[BOTTOM]);
+		} else if (bundleType == BUNDLE_TYPE_360) {
+			setTopBottom(imgs[TOP], imgs[BOTTOM]);
+		}
 	}
 
 	/**

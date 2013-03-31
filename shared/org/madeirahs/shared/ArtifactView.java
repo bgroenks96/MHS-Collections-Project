@@ -41,6 +41,8 @@ public class ArtifactView extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4264988628541725443L;
+	
+	private static final Color BACKGROUND = new Color(0xF0F0F0);
 
 	private static final String SHTML = "<html><font size=3>", EHTML = "</font></html>",
 			TITLE = "<b>Title:</b> ", DONOR = "<b>Donor:</b> ",
@@ -128,7 +130,7 @@ public class ArtifactView extends JPanel {
 		gbc.insets = new Insets(0, 0, 10, 0);
 		vpan = new V3DPanel(elem, provider);
 		vpan.setPreferredSize(new Dimension(500, 300));
-		setBackground(Color.WHITE);
+		setBackground(BACKGROUND);
 		add(vpan, gbc);
 		validate();
 	}

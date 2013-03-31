@@ -105,7 +105,14 @@ public class AboutUI extends JDialog {
 			String it = attr.getValue(Attributes.Name.IMPLEMENTATION_TITLE);
 			String sv = attr.getValue(Attributes.Name.SPECIFICATION_VERSION);
 			String iv = attr.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
-			String str = st + (st.equals(it) ? "":" (" + it + ")") + " - v."+ sv + ((iv.equals(sv)) ? "":"_"+iv);
+			String str = null;
+			if(st == null || sv == null) {
+				str = it + " - v." + iv;
+			} else if(it == null || sv == null) {
+				str = st + " - v." + sv;
+			} else {
+				str = st + (st.equals(it) ? "":" (" + it + ")") + " - v."+ sv + ((iv.equals(sv)) ? "":"_"+iv);
+			}
 			strs.add(str);
 		}
 		

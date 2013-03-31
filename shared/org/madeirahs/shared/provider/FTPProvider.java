@@ -38,7 +38,7 @@ import org.apache.commons.net.ftp.*;
  */
 public class FTPProvider implements DataProvider {
 	
-	private static final int SO_TIMEOUT = 0x3938700;
+	private static final int SO_TIMEOUT = 0x3938700, BUFF_SIZE = 0x8000; //32kB
 
 	private FTPClient ftp = new FTPClient();
 	private String address, wkdir = "/", home = wkdir;
@@ -68,6 +68,7 @@ public class FTPProvider implements DataProvider {
 	 *             if the socket could not be opened.
 	 */
 	public FTPProvider(String address) throws SocketException, IOException {
+		init();
 		connect(address);
 	}
 
@@ -93,6 +94,7 @@ public class FTPProvider implements DataProvider {
 	 */
 	public FTPProvider(String address, String username, String password)
 			throws LoginException, SocketException, IOException {
+		init();
 		connect(address, username, password);
 	}
 
@@ -112,7 +114,7 @@ public class FTPProvider implements DataProvider {
 		this.address = address;
 		this.wkdir = ftp.printWorkingDirectory();
 		login = true;
-		init();
+		initConn();
 	}
 
 	/**
@@ -139,12 +141,23 @@ public class FTPProvider implements DataProvider {
 			Runtime.getRuntime().addShutdownHook(EXIT_HOOK);
 			this.wkdir = ftp.printWorkingDirectory();
 			login = true;
-			init();
+			initConn();
 		}
+	}
+	
+	/**
+	 * Internal initialization method called by constructors.  This is called once before
+	 * any connection attempt is made.
+	 * @throws SocketException
+	 */
+	protected void init() throws SocketException {
+		ftp.setBufferSize(BUFF_SIZE);
+		ftp.setSendBufferSize(BUFF_SIZE);
+		ftp.setReceiveBufferSize(BUFF_SIZE);
 	}
 
 	/**
-	 * Internal initialization method called by constructors. Subclasses should
+	 * Internal connection initialization method called by connect methods. Subclasses should
 	 * also call this method if not explicitly calling super constructor. <br/>
 	 * <br/>
 	 * Specification:<br/>
@@ -153,12 +166,14 @@ public class FTPProvider implements DataProvider {
 	 * 
 	 * @throws IOException
 	 */
-	protected void init() throws IOException {
+	protected void initConn() throws IOException {
 		ftp.setSoTimeout(SO_TIMEOUT);
+		ftp.setTcpNoDelay(false);
+		ftp.setFileTransferMode(FTPClient.BLOCK_TRANSFER_MODE);
 		ftp.enterLocalPassiveMode(); // should help to avoid any issues with
-		// firewalls
+		    // firewalls
 		ftp.setFileType(FTP.BINARY_FILE_TYPE); // All file transfers by
-		// FTPProvider should be binary.
+		    // FTPProvider should be binary.
 
 		ka = new Thread(new KeepAlive());
 		ka.setDaemon(true);

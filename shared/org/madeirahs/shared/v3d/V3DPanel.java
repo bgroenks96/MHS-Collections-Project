@@ -291,13 +291,13 @@ public class V3DPanel extends JPanel {
 			switch (currFrame) {
 			case V3DBundle.TOP:
 				if (bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_360
-						&& bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_TOP) {
+				&& bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_TOP) {
 					currFrame = prevFrame;
 				}
 				break;
 			case V3DBundle.BOTTOM:
 				if (bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_360
-						&& bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_BOTTOM) {
+				&& bundle.getBundleType() != V3DBundle.BUNDLE_TYPE_BOTTOM) {
 					currFrame = prevFrame;
 				}
 			}
@@ -407,7 +407,7 @@ public class V3DPanel extends JPanel {
 			}
 			rscs = new SoftReference<BufferedImage[]>(
 					new BufferedImage[rscNames.length]); // an attempt to prevent any kind of memory leak
-			                                             // in loaded image data - the effects of this aren't certain.
+			// in loaded image data - the effects of this aren't certain.
 			SoftReference<BufferedImage[]> ref = rscs;
 			BufferedImage[] rscs = ref.get();
 			if (failed) {
@@ -426,7 +426,7 @@ public class V3DPanel extends JPanel {
 						loading = false;
 						JOptionPane.showMessageDialog(instance,
 								provider.getProtocolName()
-										+ " provider was not available.",
+								+ " provider was not available.",
 								"Failed to load image data",
 								JOptionPane.ERROR_MESSAGE);
 						notifyCallbacks(false);
@@ -440,19 +440,18 @@ public class V3DPanel extends JPanel {
 							.loadImage(rscNames[V3DBundle.BACK]);
 					rscs[V3DBundle.LEFT] = provider
 							.loadImage(rscNames[V3DBundle.LEFT]);
-					if (rscs.length == 6) {
-						rscs[V3DBundle.BOTTOM] = provider
-								.loadImage(rscNames[V3DBundle.BOTTOM]);
-						rscs[V3DBundle.TOP] = provider
-								.loadImage(rscNames[V3DBundle.TOP]);
-					}
+					if(bundle.getBundleType() == V3DBundle.BUNDLE_TYPE_BOTTOM || bundle.getBundleType() == V3DBundle.BUNDLE_TYPE_360)
+						rscs[V3DBundle.BOTTOM] = provider.loadImage(rscNames[V3DBundle.BOTTOM]);
+					if(bundle.getBundleType() == V3DBundle.BUNDLE_TYPE_TOP || bundle.getBundleType() == V3DBundle.BUNDLE_TYPE_360)
+						rscs[V3DBundle.TOP] = provider.loadImage(rscNames[V3DBundle.TOP]);
+					
 					for (int i = 0; i < rscs.length; i++) {
 						System.out.println("Configuring image " + (i+1) + " of " + rscs.length);
 						if (rscs[i] == null) {
 							continue;
 						}
 						int wt, ht;
-						 /*
+						/*
 						 * If the image is too big for the panel, scale it to maximum
 						 * possible size (keeping aspect ratio)
 						 */
@@ -470,11 +469,11 @@ public class V3DPanel extends JPanel {
 									newSize.width, newSize.height,
 									BufferedImage.TYPE_INT_ARGB);
 							scaled.getGraphics()
-									.drawImage(
-											rscs[i].getScaledInstance(
-													newSize.width,
-													newSize.height,
-													Image.SCALE_SMOOTH), 0, 0,
+							.drawImage(
+									rscs[i].getScaledInstance(
+											newSize.width,
+											newSize.height,
+											Image.SCALE_SMOOTH), 0, 0,
 											newSize.width, newSize.height, null);
 							rscs[i] = scaled;
 						}
@@ -502,7 +501,7 @@ public class V3DPanel extends JPanel {
 					loading = false;
 					JOptionPane.showMessageDialog(instance,
 							provider.getProtocolName()
-									+ " provider was not available.",
+							+ " provider was not available.",
 							"Failed to load image data",
 							JOptionPane.ERROR_MESSAGE);
 					notifyCallbacks(false);
@@ -528,10 +527,10 @@ public class V3DPanel extends JPanel {
 						notifyCallbacks(false);
 						return;
 					}
-					
+
 					System.out.println("Configuring image " + (i+1) + " of " + rscs.length);
 					int wt, ht;
-					 /*
+					/*
 					 * If the image is too big for the panel, scale it to maximum
 					 * possible size (keeping aspect ratio)
 					 */
@@ -550,7 +549,7 @@ public class V3DPanel extends JPanel {
 						scaled.getGraphics().drawImage(
 								rscs[i].getScaledInstance(newSize.width,
 										newSize.height, Image.SCALE_SMOOTH), 0,
-								0, newSize.width, newSize.height, null);
+										0, newSize.width, newSize.height, null);
 						rscs[i] = scaled;
 					}
 				}
@@ -559,7 +558,7 @@ public class V3DPanel extends JPanel {
 				loaded = true;
 				repaint();
 			}
-			
+
 			notifyCallbacks(loaded);
 		}
 
@@ -570,21 +569,21 @@ public class V3DPanel extends JPanel {
 			currFrame = 0;
 		}
 	}
-	
+
 	public void addLoadCallback(LoaderCallback lc) {
 		callbacks.add(lc);
 	}
-	
+
 	public void removeLoadCallback(LoaderCallback lc) {
 		callbacks.remove(lc);
 	}
-	
+
 	private synchronized void notifyCallbacks(boolean success) {
 		for(LoaderCallback lc:callbacks) {
 			lc.onFinish(success);
 		}
 	}
-	
+
 	public static interface LoaderCallback {
 		public void onFinish(boolean success);
 	}

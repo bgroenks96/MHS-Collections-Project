@@ -23,6 +23,7 @@ package org.madeirahs.applet.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -32,9 +33,12 @@ import javax.swing.event.*;
 import org.madeirahs.applet.*;
 import org.madeirahs.shared.*;
 import org.madeirahs.shared.Artifact.StringField;
+import org.madeirahs.shared.Artifact.TimeField;
 import org.madeirahs.shared.database.*;
 import org.madeirahs.shared.database.ArtifactSorter.Mode;
 import org.madeirahs.shared.database.ArtifactSorter.Variable;
+import org.madeirahs.shared.database.Database.TimeSearchFormat;
+import org.madeirahs.shared.time.*;
 
 
 public class MainView extends PageView {
@@ -217,13 +221,29 @@ public class MainView extends PageView {
 			break;
 		case 3:
 			a = Artifact.createGenericArtifact();
-			a.title = search.getText();
-			db.searchByField(StringField.TITLE, a);
+			TimeSpec ts = parseStandardTimeString(search.getText());
+			if(ts == null) {
+				DateTime dt = new DateTime(Calendar.getInstance().getTime(), DateFormat.getDateInstance());
+				dt.forcedValue = search.getText();
+				a.objDate = dt;
+				resArr = db.searchByFieldHybrid(TimeField.OBJECT_DATE, a);
+			} else {
+				a.objDate = ts;
+				resArr = db.searchByField(TimeField.OBJECT_DATE, a);
+			}
 			break;
 		case 4:
 			a = Artifact.createGenericArtifact();
-			a.title = search.getText();
-			db.searchByField(StringField.TITLE, a);
+			ts = parseStandardTimeString(search.getText());
+			if(ts == null) {
+				DateTime dt = new DateTime(Calendar.getInstance().getTime(), DateFormat.getDateInstance());
+				dt.forcedValue = search.getText();
+				a.subDate = dt;
+				resArr = db.searchByFieldHybrid(TimeField.SUBMISSION_DATE, a);
+			} else {
+				a.subDate = ts;
+				resArr = db.searchByField(TimeField.SUBMISSION_DATE, a);
+			}
 			break;
 		case 5:
 			a = Artifact.createGenericArtifact();
@@ -233,6 +253,26 @@ public class MainView extends PageView {
 		}
 
 		fillData(resArr, false);
+	}
+	
+	private TimeSpec parseStandardTimeString(String str) {
+		String[] pts = str.split("-");
+		for(TimeSearchFormat tsf:TimeSearchFormat.values()) {
+			Date time = tsf.parse(pts[0]);
+			if(time == null)
+				continue;
+			DateTime dt = new DateTime(time, tsf.getFormat());
+			if(pts.length > 1) {
+				Date endTime = tsf.parse(pts[pts.length - 1]);
+				if(!endTime.after(time))
+					return dt;
+				TimeFrame tf = new TimeFrame(time, endTime, tsf.getFormat());
+				return tf;
+			} else {
+				return dt;
+			}
+		}
+		return null;
 	}
 
 	private ArtifactSorter.Mode getSortingMode(int sortInd) {

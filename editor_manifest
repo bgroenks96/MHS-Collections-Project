@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Created-By: 1.6.0 (Sun Microsystems Inc.)
 Main-Class: org/madeirahs/editor/main/Launcher
-Class-Path: commons-net-3.0.1.jar shared-lib.jar
+Class-Path: commons-net.jar shared-lib.jar seaglasslookandfeel-0.2.jar
 Name: org/madeirahs/editor/
 Specification-Title: MHS Collections Editor
-Specification-Version: 1.0.1
+Specification-Version: 1.0.2
 Specification-Vendor: Madeira Historical Society
 Implementation-Title: org.madeirahs.editor
-Implementation-Version: 0.81-004
+Implementation-Version: 0.4
 Implementation-Vendor: Madeira Historical Society
