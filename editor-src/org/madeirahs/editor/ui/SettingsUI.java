@@ -46,7 +46,7 @@ public class SettingsUI extends JDialog {
 	private static final String[] INTERVAL_OPTS = new String[] {ALWAYS,DAILY,WEEKLY,MONTHLY};
 
 	JTextField usr, limitNum;
-	JCheckBox update, limit;
+	JCheckBox update, limit, login;
 	JComboBox interval;
 	Box root;
 
@@ -62,6 +62,12 @@ public class SettingsUI extends JDialog {
 		usr = new JTextField(TEXT_FIELD_LENGTH);
 		usrp.add(usr);
 		root.add(usrp);
+		
+		Box loginOpts = Box.createHorizontalBox();
+		login = new JCheckBox("Login to server on start");
+		loginOpts.add(login);
+		loginOpts.add(Box.createHorizontalGlue());
+		root.add(loginOpts);
 
 		Box updateOpts = Box.createHorizontalBox();
 		update = new JCheckBox("Check for updates on start");
@@ -115,6 +121,7 @@ public class SettingsUI extends JDialog {
 	private void syncOptions() {
 		usr.setText((Settings.usr != null) ? Settings.usr:"");
 		update.setSelected(Settings.updateCheck);
+		login.setSelected(Settings.initLogin);
 		UpdateInterval intrv = Settings.UpdateInterval.getByMillis(Settings.interval);
 		switch(intrv) {
 		case DAILY:
@@ -149,6 +156,7 @@ public class SettingsUI extends JDialog {
 			Preferences p = Settings.prefs();
 			p.put(Settings.USER_KEY, usr.getText());
 			p.putBoolean(Settings.UPDATE_CHECK_KEY, update.isSelected());
+			p.putBoolean(Settings.INIT_LOGIN_KEY, login.isSelected());
 			try {
 				int newLimit = Integer.parseInt(limitNum.getText());
 				if(!limit.isSelected())

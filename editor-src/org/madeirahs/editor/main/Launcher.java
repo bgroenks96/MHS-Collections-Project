@@ -46,7 +46,7 @@ public class Launcher {
 		
 		MemoryManagement.init();
 		AppSupport.checkStorageDirs();
-		ServerFTP.login();
+		ServerFTP.login(true);
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override

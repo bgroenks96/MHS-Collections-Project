@@ -35,8 +35,9 @@ import org.madeirahs.shared.provider.*;
 import org.madeirahs.shared.time.*;
 
 /**
- * Shared class representing the artifact database for the MHS-Collections project. Database
- * provides all the means necessary for creating, editing and searching the database.
+ * Shared class representing the artifact database for the MHS-Collections project. Database class
+ * provides all the means necessary for creating, editing, and searching the database.  The actual
+ * data is stored in an Artifact array within this class.
  * 
  * @author Brian Groenke
  * 
@@ -52,7 +53,7 @@ public class Database implements Serializable {
 			DB_ENTRY_SUFFIX = ".database", DB_TMP_STORE = "tmpstore", DB_ARCHIVE_NAME_SEP = "_", UNIQUE_ID_FLAG = "#%%#";
 
 	private static int DL_BUFF_SIZE = 5120, DB_STORE_COMPRESSION_LEVEL = 9; // 0-9; 9 being max
-																			// compression
+	// compression
 
 	private Artifact[] data;
 	private long timestamp = -1;
@@ -107,14 +108,13 @@ public class Database implements Serializable {
 			zipin.close();
 			throw (new DatabaseException("found invalid entry: " + dbentry.getName()));
 		}
-		@SuppressWarnings("resource")
 		InputStream instream = (prog != null) ? new MonitoredInStream(zipin,
 				prog, (dbentry.getSize() > 0) ? dbentry.getSize():bos.size()) : zipin;
-		ObjectInputStream objIn = new ObjectInputStream(instream);
-		Database loaded = (Database) objIn.readObject();
-		objIn.close();
-		Arrays.sort(loaded.data, new ArtifactComparator());
-		return loaded;
+				ObjectInputStream objIn = new ObjectInputStream(instream);
+				Database loaded = (Database) objIn.readObject();
+				objIn.close();
+				Arrays.sort(loaded.data, new ArtifactComparator());
+				return loaded;
 	}
 
 	/**
@@ -170,41 +170,41 @@ public class Database implements Serializable {
 		}
 		OutputStream curr = (prog != null) ? new MonitoredOutStream(
 				new BufferedOutputStream(a), prog, storeStream.size())
-				: new BufferedOutputStream(a);
-		ByteArrayInputStream fromStore = new ByteArrayInputStream(
-				storeStream.toByteArray());
-		byte[] buff = new byte[DL_BUFF_SIZE];
-		int len = 0;
-		while ((len = fromStore.read(buff)) > 0) {
-			curr.write(buff, 0, len);
-		}
+		: new BufferedOutputStream(a);
+				ByteArrayInputStream fromStore = new ByteArrayInputStream(
+						storeStream.toByteArray());
+				byte[] buff = new byte[DL_BUFF_SIZE];
+				int len = 0;
+				while ((len = fromStore.read(buff)) > 0) {
+					curr.write(buff, 0, len);
+				}
 
-		curr.close();
+				curr.close();
 
-		prov.rename(loc + "/" + currTime + DB_TMP_STORE + UploadUI.PAR_EXT, loc
-				+ "/" + DATABASE);
+				prov.rename(loc + "/" + currTime + DB_TMP_STORE + UploadUI.PAR_EXT, loc
+						+ "/" + DATABASE);
 
-		// ------ Write to archives -------//
-		fromStore.reset(); // reset byte-array stream's buffer pos
-		OutputStream b = prov.getOutputStream(archiveDir + "/" + currTime + DB_ARCHIVE_NAME_SEP
-				+ DATABASE);
-		if (b == null) {
-			throw (new IOException("provider returned null output stream"));
-		}
-		if (prog != null) {
-			prog.setNote("Archiving database store-file...");
-		}
-		OutputStream archives = (prog != null) ? new MonitoredOutStream(
-				new BufferedOutputStream(b), prog, storeStream.size())
+				// ------ Write to archives -------//
+				fromStore.reset(); // reset byte-array stream's buffer pos
+				OutputStream b = prov.getOutputStream(archiveDir + "/" + currTime + DB_ARCHIVE_NAME_SEP
+						+ DATABASE);
+				if (b == null) {
+					throw (new IOException("provider returned null output stream"));
+				}
+				if (prog != null) {
+					prog.setNote("Archiving database store-file...");
+				}
+				OutputStream archives = (prog != null) ? new MonitoredOutStream(
+						new BufferedOutputStream(b), prog, storeStream.size())
 				: new BufferedOutputStream(b);
-		buff = new byte[DL_BUFF_SIZE];
-		while ((len = fromStore.read(buff)) > 0) {
-			archives.write(buff, 0, len);
-		}
+						buff = new byte[DL_BUFF_SIZE];
+						while ((len = fromStore.read(buff)) > 0) {
+							archives.write(buff, 0, len);
+						}
 
-		archives.close();
+						archives.close();
 	}
-	
+
 	/**
 	 * Writes this Database to a store file at the given location.
 	 * @param dir
@@ -212,7 +212,7 @@ public class Database implements Serializable {
 	 */
 	public void writeLocal(String dir) throws IOException {
 		long currTime = System.currentTimeMillis();
-		
+
 		ByteArrayOutputStream storeStream = new ByteArrayOutputStream();
 		ZipOutputStream zipout = new ZipOutputStream(storeStream);
 		zipout.setLevel(DB_STORE_COMPRESSION_LEVEL);
@@ -220,7 +220,7 @@ public class Database implements Serializable {
 		ObjectOutputStream objOut = new ObjectOutputStream(zipout);
 		objOut.writeObject(this);
 		objOut.close();
-		
+
 		FileOutputStream fileOut = new FileOutputStream(dir + File.separator + currTime + DB_SUFFIX);
 		ByteArrayInputStream storeIn = new ByteArrayInputStream(storeStream.toByteArray());
 		byte[] buff = new byte[DL_BUFF_SIZE];
@@ -239,7 +239,7 @@ public class Database implements Serializable {
 	 * @throws ClassNotFoundException
 	 */
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
-			ClassNotFoundException {
+	ClassNotFoundException {
 		in.defaultReadObject();
 		dataLock = new Object();
 	}
@@ -254,7 +254,7 @@ public class Database implements Serializable {
 	public long getTimestamp() {
 		return timestamp;
 	}
-	
+
 	/**
 	 * Returns the last recorded user who committed changes to the database.
 	 * @return the username as a String or null if unknown
@@ -313,10 +313,12 @@ public class Database implements Serializable {
 		}
 
 		int ind = contains(e);
+		boolean overwrite = false;
 		if (ind >= 0) {
 			if (forceOverwrite) {
 				synchronized (dataLock) {
 					data[ind] = e;
+					overwrite = true;
 					return;
 				}
 			} else {
@@ -325,9 +327,11 @@ public class Database implements Serializable {
 			}
 		}
 
-		synchronized (dataLock) {
-			data = Arrays.copyOf(data, data.length + 1);
-			data[data.length - 1] = e;
+		if(!overwrite) {
+			synchronized (dataLock) {
+				data = Arrays.copyOf(data, data.length + 1);
+				data[data.length - 1] = e;
+			}
 		}
 	}
 
@@ -439,7 +443,7 @@ public class Database implements Serializable {
 		}
 		return found;
 	}
-	
+
 	/**
 	 * Search the database for the specified time attribute of the given Artifact, using
 	 * the String representation of the time instead of absolute time comparison.  This search method will
@@ -460,14 +464,14 @@ public class Database implements Serializable {
 			for (Artifact a : data) {
 				mapvals.put(timefield(a, fieldName).toString(), a);
 			}
-			
+
 			TimeSpec qspec = timefield(query, fieldName);
 			StringCrawler strc = new StringCrawler(qspec.toString());
 			String[] specs = mapvals.keySet().toArray(
 					new String[mapvals.size()]);
 			Arrays.sort(specs, strc);
 			found = new Artifact[specs.length];
-			
+
 			// Copy into the result array top-down so that most relevant results
 			// are at front of array.
 			// Irrelevant results are weeded out by the call to isRelevant()
@@ -521,7 +525,7 @@ public class Database implements Serializable {
 			}
 			found = Arrays.copyOf(found, fc);
 		}
-		
+
 		return found;
 	}
 
@@ -614,7 +618,7 @@ public class Database implements Serializable {
 			int aptn = 0, bptn = 0;
 			aptn = _compare(a);
 			bptn = _compare(b);
-			
+
 			if (aptn > bptn) {
 				return 1;
 			} else if (aptn == bptn) {
@@ -623,14 +627,14 @@ public class Database implements Serializable {
 				return -1;
 			}
 		}
-		
+
 		@Override
 		public boolean isRelevant(String a) {
 			a = a.substring(0, a.indexOf(UNIQUE_ID_FLAG));
 			int aptn = _compare(a);
 			return aptn >= 1;
 		}
-		
+
 		/**
 		 * Search algorithm that compares the given String value to the query.
 		 * The query is split up by whitespace into separate words.  Then <code>indexOf</code> is
@@ -653,7 +657,7 @@ public class Database implements Serializable {
 					aptn++;
 				}
 			}
-			
+
 			return aptn;
 		}
 
@@ -713,18 +717,18 @@ public class Database implements Serializable {
 			return a.contains(query) || query.contains(a);
 		}
 	}
-	
+
 	public static enum TimeSearchFormat {
-		
+
 		FORM_A("MMddyyyy"), FORM_B("yyyy"), FORM_C("MMM dd yyyy"), FORM_D("MMM dd, yyyy"), FORM_E("MMM yyyy"),
-		FORM_F("MM/yyyy"), FORM_G("MM/dd/yyyy");
-		
+		FORM_F("MM/yyyy"), FORM_G("MM/dd/yyyy"), FORM_H("MMMM dd, yyyy"), FORM_I("MMMM dd yyyy"), FORM_J("MMMM yyyy");
+
 		SimpleDateFormat format;
-		
+
 		TimeSearchFormat(String format) {
 			this.format = new SimpleDateFormat(format);
 		}
-		
+
 		public Date parse(String time) {
 			Date parsedTime = null;
 			try {
@@ -734,7 +738,7 @@ public class Database implements Serializable {
 			}
 			return parsedTime;
 		}
-		
+
 		public SimpleDateFormat getFormat() {
 			return format;
 		}

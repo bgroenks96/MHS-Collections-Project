@@ -21,14 +21,20 @@ package org.madeirahs.editor.main;
 
 import java.util.prefs.*;
 
+/**
+ * Uses the Java preferences API to store user settings.  The caller is responsible for calling the 'put' commands
+ * on the fetched Preferences node.  After data is stored, a call to sync() and save() should follow.
+ * @author Brian Groenke
+ *
+ */
 public final class Settings {
 
 	public static final String NODE = "mhseditor", USER_KEY = "user", ARCHIVE_LIMIT_KEY = "archiveLimit", UPDATE_CHECK_KEY = "updateCheck",
-			UPDATE_INTERVAL_KEY = "updateInterval";
+			UPDATE_INTERVAL_KEY = "updateInterval", INIT_LOGIN_KEY = "initLogin";
 
 	public static String usr;
 	public static int archiveLimit;
-	public static boolean updateCheck;
+	public static boolean updateCheck, initLogin;
 	public static long interval;
 	
 	static {
@@ -56,6 +62,7 @@ public final class Settings {
 		archiveLimit = prefs.getInt(ARCHIVE_LIMIT_KEY, -1);
 		updateCheck = prefs.getBoolean(UPDATE_CHECK_KEY, true);
 		interval = prefs.getLong(UPDATE_INTERVAL_KEY, Long.MIN_VALUE);
+		initLogin = prefs.getBoolean(INIT_LOGIN_KEY, true);
 	}
 	
 	public enum UpdateInterval {

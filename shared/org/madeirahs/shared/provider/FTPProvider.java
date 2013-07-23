@@ -38,7 +38,7 @@ import org.apache.commons.net.ftp.*;
  */
 public class FTPProvider implements DataProvider {
 	
-	private static final int SO_TIMEOUT = 0x3938700, BUFF_SIZE = 0x8000; //32kB
+	private static final int SO_TIMEOUT = 0x3938700, BUFF_SIZE = 0x4000; //16kB
 
 	private FTPClient ftp = new FTPClient();
 	private String address, wkdir = "/", home = wkdir;
@@ -150,7 +150,7 @@ public class FTPProvider implements DataProvider {
 	 * any connection attempt is made.
 	 * @throws SocketException
 	 */
-	protected void init() throws SocketException {
+	protected void init() throws IOException {
 		ftp.setBufferSize(BUFF_SIZE);
 		ftp.setSendBufferSize(BUFF_SIZE);
 		ftp.setReceiveBufferSize(BUFF_SIZE);

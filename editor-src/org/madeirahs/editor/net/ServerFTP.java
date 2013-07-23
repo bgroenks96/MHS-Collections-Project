@@ -205,9 +205,10 @@ public class ServerFTP {
 	 * algorithm. If a FTPProvider already exists with an active connection, it
 	 * will be disconnected before continuing.
 	 * 
+	 * @param auto true if this is an auto login (e.g. on start) false otherwise
 	 * @throws IOException
 	 */
-	public static void login() throws IOException {
+	public static void login(boolean auto) throws IOException {
 		if (prov != null && prov.isAvailable()) {
 			prov.disconnect();
 		}
@@ -277,7 +278,7 @@ public class ServerFTP {
 			prog.setVisible(false);
 			window.setVisible(true);
 			userInput.requestFocus();
-		} else {
+		} else if(Settings.initLogin || !auto) {
 			String[] info = readLoginInfo();
 			new ServerLogin().login(ftpServerUrl, info[0], info[1]);
 		}
@@ -547,7 +548,7 @@ public class ServerFTP {
 					ftpServerUrl = addr;
 				prov = new FTPProvider(ftpServerUrl, usr, pass);
 				prov.setWorkingDir(rootDir);
-				ServerFTP.checkDirs();
+				checkDirs();
 				if (window != null) {
 					window.dispose();
 					saveLoginInfo(usr, pass);

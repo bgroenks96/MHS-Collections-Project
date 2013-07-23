@@ -184,7 +184,7 @@ public class UploadUI {
 	}
 
 	private static final String PTH = ServerFTP.rscDir;
-	private static final int BUFF_SIZE = 0x2000; //8kB
+	private static final int BUFF_SIZE = 0x4000; //16kB
 
 	private void uploadResources() {
 		String[] filenames = fileArrCopy;
@@ -209,13 +209,12 @@ public class UploadUI {
 			String prt = pts[pts.length - 1];
 			prt = PTH + prt + PAR_EXT;
 			try {
-				OutputStream out = ftp.getOutputStream(prt);
+				BufferedOutputStream out = new BufferedOutputStream(ftp.getOutputStream(prt));
 				BufferedInputStream in = new BufferedInputStream(prov.getInputStream(s));
 				byte[] buff = new byte[BUFF_SIZE];
 				int len;
 				while ((len = in.read(buff)) >= 0 && !prog.isCanceled()) {
 					out.write(buff, 0, len);
-					out.flush();
 					total += len;
 					prog.setProgress((int) (Math.round((total / combo) * 100)));
 				}

@@ -96,7 +96,8 @@ public class ManageUI extends JDialog {
 
 		actions = new JPanel();
 		((FlowLayout)actions.getLayout()).setAlignment(FlowLayout.LEFT);
-		conn = new JButton((ServerFTP.getProvider().isAvailable()) ? "Disconnect":"Connect");
+		FTPProvider ftp = ServerFTP.getProvider();
+		conn = new JButton((ftp != null && ftp.isAvailable()) ? "Disconnect":"Connect");
 		conn.setPreferredSize(ACTION_BUTTON_SIZE);
 		conn.addActionListener(new ConnectListener());
 		actions.add(conn);
@@ -236,7 +237,7 @@ public class ManageUI extends JDialog {
 		local.setListData(lda);
 
 		FTPProvider ftp = ServerFTP.getProvider();
-		if(!ftp.isAvailable()) {
+		if(ftp == null || !ftp.isAvailable()) {
 			JOptionPane.showMessageDialog(inst, "Unable to retrieve database archives: FTP provider offline", "Provider Not Available", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -275,7 +276,7 @@ public class ManageUI extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			final FTPProvider ftp = ServerFTP.getProvider();
-			if(ftp.isAvailable()) {
+			if(ftp != null && ftp.isAvailable()) {
 				Threads.execute(new Runnable() {
 
 					@Override
@@ -296,18 +297,20 @@ public class ManageUI extends JDialog {
 					}
 
 				});
-			} else {
+			} else if(ftp != null) {
 				Threads.execute(new Runnable() {
 
 					@Override
 					public void run() {
 						conn.setEnabled(false);
 						inst.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						conn.repaint();
 						try {
 							if(usr.getText().isEmpty() || passcode.getText().isEmpty())
 								ftp.reconnect(server.getText());
 							else
 								ftp.reconnect(server.getText(), usr.getText(), passcode.getText());
+							ftp.setWorkingDir(ServerFTP.ROOT_DIR);
 							conn.setText("Disconnect");
 							JOptionPane.showMessageDialog(inst, "Successfully logged in to FTP server @ " + server.getText());
 						} catch (IOException e1) {
@@ -319,6 +322,29 @@ public class ManageUI extends JDialog {
 						}
 					}
 
+				});
+			} else {
+				Threads.execute(new Runnable() {
+
+					@Override
+					public void run() {
+						conn.setEnabled(false);
+						inst.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						conn.repaint();
+						try {
+							ServerFTP.login(false);
+							conn.setText("Disconnect");
+							JOptionPane.showMessageDialog(inst, "Successfully logged in to FTP server @ " + server.getText());
+						} catch (IOException e2) {
+							e2.printStackTrace();
+							JOptionPane.showMessageDialog(inst, "Failed to connect:\n"+e2.toString(), "I/O Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						} finally {
+							conn.setEnabled(true);
+							inst.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+						}
+					}
+					
 				});
 			}
 		}
