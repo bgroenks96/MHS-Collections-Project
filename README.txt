@@ -14,11 +14,7 @@ The Eagle candidate himself - Brian Groenke.
 Project Source Components:
 
 Applet - The front-end Java applet that will be loaded into the MHS webpage and utilized by end-users to view artifact information.  Uses the shared library.
-<<<<<<< HEAD
-Project status:  Beta development
-=======
 Project status:  Stable (DEV)
->>>>>>> Bug fixes and added auto-login setting
 
 Editor -  The editor software for project participants to create, edit and upload artifact data to the database.  Uses the shared library.
 Note: the editor requires FTP server login information, so it's mostly useful for only project collaborators.
