@@ -1,6 +1,6 @@
 Madeira Historical Society Collections Project
 
-This software is part of an Eagle project with the purpose of digitizing and publicizing historical artifacts for the educational benefit of the Madeira community and anyone else interested in the city's history.  All components of this project are written in The Java Programming Language, and any native code (although there currently is none) written in The C Programming Language.
+This software is part of a project to digitize and publicize historical artifacts for the educational benefit of the Madeira community and anyone else interested in the city's history.  All components of this project are written in The Java Programming Language, and any native code (although there currently is none) written in The C Programming Language.
 
 Who is allowed to fork this project?
 Anyone!  This project has produced some very interesting and useful code.  The shared-library in particular has a very resourceful codebase that could be applied to many other things.
