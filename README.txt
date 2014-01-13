@@ -8,9 +8,6 @@ Anyone!  This project has produced some very interesting and useful code.  The s
 Who is allowed to collaborate on this project?
 Only selected individuals, probably involved with the Madeira Historical Society.  The information regarding server-handling and login is not public.
 
-Who heads this project?
-The Eagle candidate himself - Brian Groenke.
-
 Project Source Components:
 
 Applet - The front-end Java applet that will be loaded into the MHS webpage and utilized by end-users to view artifact information.  Uses the shared library.
