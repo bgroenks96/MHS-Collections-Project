@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build-all" name="collections-project">
+
+  <filelist id="build-dirs" dir=".">
+    <file name="shared" />
+    <file name="editor" />
+    <file name="editor-updater" />
+    <file name="editor-launcher" />
+  </filelist>
+
+  <target name="build-all">
+    <subant target="build">
+      <filelist refid="build-dirs" />
+    </subant>
+  </target>
+
+  <target name="clean-all">
+    <subant target="clean">
+      <filelist refid="build-dirs" />
+    </subant>
+  </target>
+
+  <target name="rebuild" depends="clean-all,build-all" />
+
+</project>
